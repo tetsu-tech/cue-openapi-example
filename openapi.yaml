@@ -1,0 +1,96 @@
+openapi: 3.0.3
+info:
+  title: The sample API
+  version: 0.0.1
+servers:
+  - url: http://localhost:3000/v1
+    description: local server
+paths:
+  /internal-service/masspush/findQueueById:
+    post:
+      operationId: TestService_FindQueueById
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindQueueByIdRequest'
+        required: true
+      responses:
+        "200":
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Queue'
+        default:
+          description: An unexpected error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayRuntimeError'
+      tags:
+        - TestService
+components:
+  schemas:
+    Queue:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+        created_time:
+          type: string
+          format: date-time
+        modified_time:
+          type: string
+          format: date-time
+        config:
+          type: string
+      required:
+        - id
+        - status
+        - start_time
+        - end_time
+        - created_time
+        - modified_time
+        - config
+    FindQueueByIdRequest:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+    GatewayRuntimeError:
+      type: object
+      properties:
+        code:
+          format: int32
+          type: number
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProtocolBufferAny'
+        error:
+          type: string
+        message:
+          type: string
+    ProtocolBufferAny:
+      type: object
+      properties:
+        typeUrl:
+          description: hoge
+          type: string
+        value:
+          format: byte
+          type: string
+      required:
+        - typeUrl
+        - value
